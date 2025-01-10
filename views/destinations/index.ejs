@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Destinations</title>
+</head>
+<body>
+  <h1>All Destinations</h1>
+  <ul>
+    <% allDestinations.forEach((destination) => { %>
+      <li>
+        <a href="/destinations/<%= destination._id %>">
+          <%= destination.name %>
+        </a>
+      </li>
+    <% }) %>
+  </ul>
+</body>
+</html>

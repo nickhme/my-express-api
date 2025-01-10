@@ -1,66 +1,28 @@
 import express from 'express'
-// You can import your own files into each other.
-import destinations from './data.js'
 // * Import mongoose
 import mongoose from 'mongoose'
 // * Importing my destinations model
-import Destination from './models/destination.js'
-
+import destinationController from './controllers/destinationController.js'
+import logger from './middleware/logger.js'
+import errorHandler from './middleware/errorHandler.js'
+import methodOverride from 'method-override'
 
 const app = express()
 
 app.use(express.json())
 
-app.post('/destinations', async function(req, res) {
-// Create the document in the database
-  const newDestination = await Destination.create(req.body)
-  // Send back our destination with appropriate status code.
-  res.status(201).send(newDestination)
-})
+// * This will expect the form data from your form, and add to req.body 
+app.use(express.urlencoded({ extended: false }))
+app.use(methodOverride('_method'))
 
+// * New logging middleware
+app.use(logger)
 
-// When the client makes a request to /
-app.get('/destinations', async function(req, res) { // call this function
-  const allDestinations = await Destination.find()
-  res.send(allDestinations)
-}) 
+// * Have our app use the new destination controller
+app.use('/', destinationController)
 
-// :id -> parameter/variable in the path, called id
-app.get('/destinations/:id', async function(req, res) {
-  const destinationId = req.params.id
-
-  const destination = await Destination.findById(destinationId)
-
-  res.send(destination)
-})
-
-app.get('/destination-by-name/:name', async function(req, res) {
-  const destination = await Destination.findOne({ name: { $regex: new RegExp(`^${req.params.name}$`, 'i') } })
-  res.send(destination)
-})
-
-
-app.delete('/destinations/:id', async function(req, res) {
-  const destinationId = req.params.id
-
-  const destination = await Destination.findById(destinationId)
-
-  if (!destination) {
-    return res.send({ message: "Destination doesn't exist." })
-  }
-
-  await Destination.findByIdAndDelete(destinationId)
-
-  res.sendStatus(204)
-})
-
-app.put('/destinations/:id', async function(req, res) {
-  const destinationId = req.params.id
-
-  const updatedDestination = await Destination.findByIdAndUpdate(destinationId, req.body, { new: true })
-
-  res.send(updatedDestination)
-})
+// * Final piece of middleware
+app.use(errorHandler)
 
 // This makes it run on port 3000.
 app.listen(3000, () => {

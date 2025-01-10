@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Show Destination</title>
+</head>
+<body>
+  <h1><%= destination.name %></h1>
+  <p><%= destination.country %></p>
+  <p><%= destination.description %></p>
+  <ul>
+    <% destination.attractions.forEach((attraction) => { %>
+      <li>
+        <%= attraction %>
+      </li>
+    <% }) %>
+  </ul>
+  <form action="/destinations/<%=destination._id%>?_method=DELETE" method="POST">
+    <button type="submit">
+      Delete <%= destination.name %>
+    </button>
+  </form>
+  <!-- Link to take us to the new edit page at /destinations/update/:id -->
+  <a href="/destinations/update/<%=destination._id%>">Update destination</a>
+</body>
+</html>
