@@ -18,6 +18,7 @@ router.route('/').get(async function(req, res, next) {
 router.route('/destinations').post(async function (req, res, next) {
   try {
     console.log(req.body)
+    if (!req.body.attractions) req.body.attractions = ""
     req.body.attractions = req.body.attractions.split(',')
     console.log(req.body)
     // Create the document in the database

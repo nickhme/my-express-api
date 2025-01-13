@@ -3,6 +3,7 @@ import express from 'express'
 import mongoose from 'mongoose'
 // * Importing my destinations model
 import destinationController from './controllers/destinationController.js'
+import userController from './controllers/userController.js'
 import logger from './middleware/logger.js'
 import errorHandler from './middleware/errorHandler.js'
 import methodOverride from 'method-override'
@@ -20,6 +21,7 @@ app.use(logger)
 
 // * Have our app use the new destination controller
 app.use('/', destinationController)
+app.use('/', userController)
 
 // * Final piece of middleware
 app.use(errorHandler)

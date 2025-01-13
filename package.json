@@ -3,7 +3,8 @@
     "ejs": "^3.1.10",
     "express": "^4.21.2",
     "method-override": "^3.0.0",
-    "mongoose": "^8.9.3"
+    "mongoose": "^7.0.0",
+    "mongoose-unique-validator": "^4.0.1"
   },
   "type": "module"
 }

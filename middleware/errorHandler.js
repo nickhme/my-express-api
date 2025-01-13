@@ -11,6 +11,7 @@ export default function errorHandler(e, req, res, next) {
     for (const key in e.errors) {
       customError[key] = e.errors[key].message
     }
+    console.log(customError)
     // ! 422 -> unprocessible entity
     res.status(422).send({ errors: customError, message: "There are issues with the data you posted." })
   } else {
