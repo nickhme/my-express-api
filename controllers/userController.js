@@ -45,8 +45,9 @@ router.post('/login', async (req, res, next) => {
     }
 
     // If we succeed, we do this later:
-    // req.session.user = user
+    req.session.user = user // adds the user to the current session
     res.send({ message: "Login successful!"})
+    console.log("hello world")
 
   } catch(e) {
     next(e)

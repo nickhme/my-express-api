@@ -17,6 +17,13 @@ router.route('/').get(async function(req, res, next) {
 
 router.route('/destinations').post(async function (req, res, next) {
   try {
+
+    console.log(req.session.user)
+
+    if (!req.session.user) {
+      return res.status(402).send({ message: "You must be logged in to post a destination." })
+    }
+
     console.log(req.body)
     if (!req.body.attractions) req.body.attractions = ""
     req.body.attractions = req.body.attractions.split(',')
