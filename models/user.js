@@ -1,10 +1,15 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
+import validator from 'validator'
 
 const userSchema = new mongoose.Schema({
   email: {
     type: String,
-    required: true
+    required: true,
+    validate: {
+      message: "Please enter a valid email.",
+      validator: (email) => validator.isEmail(email)
+    },
   },
   username: {
     type: String,
@@ -12,7 +17,19 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
+    required: [true, "Password is required."],
+    validate: [
+      {
+        message: "Password must be at least 8 characters in length.",
+        validator: (password) => password.length >= 8
+      },
+      {
+        message: "Password must contain at least 1 lowercase, uppercase, and symbol",
+        validator: (password) => validator.isStrongPassword(password, 
+          { minLowercase: 1, minUppercase: 1, minSymbols: 1, minNumbers: 1 }
+        )
+      }
+    ]
   },
 });
 
@@ -36,7 +53,6 @@ userSchema.methods.isPasswordValid = function(plaintextPassword) {
   // ? Argument 2: real existing hashed password for this user
   return bcrypt.compareSync(plaintextPassword, this.password)
 }
-
 
 export default mongoose.model("User", userSchema);
 

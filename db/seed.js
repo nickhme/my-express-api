@@ -2,6 +2,7 @@
 // * for development purposes.
 import mongoose from "mongoose"
 import Destination from '../models/destination.js'
+import User from '../models/user.js'
 import destinations from '../data.js' 
 // ? We definitely need a mongoose model (destinations, to create our data in the db)
 // ? We also need to use mongoose to connect to MongoDB
@@ -14,7 +15,21 @@ async function seed() {
   
   // ! This code wipes the database clean.
   // console.log('Clearing database... 🧹')
-  // await mongoose.connection.db.dropDatabase()
+  await mongoose.connection.db.dropDatabase()
+
+  // ! We now need to make sure all destinations have a user field set.
+  // ? Let's seed a user first, and then use that user for our destinations.
+  const user = await User.create({
+    username: "nick",
+    email: "nick@ga.com",
+    password: "Nick1234$Abc"
+  })
+
+  // ? Add the user to our destinations
+  destinations.forEach((destination) => {
+    // add the user to this destination
+    destination.user = user
+  })
 
   // This seeds new data
   console.log('Seed the new destinations 🌱')

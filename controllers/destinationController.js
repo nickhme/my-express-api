@@ -18,16 +18,16 @@ router.route('/').get(async function(req, res, next) {
 router.route('/destinations').post(async function (req, res, next) {
   try {
 
-    console.log(req.session.user)
-
     if (!req.session.user) {
       return res.status(402).send({ message: "You must be logged in to post a destination." })
     }
 
-    console.log(req.body)
     if (!req.body.attractions) req.body.attractions = ""
     req.body.attractions = req.body.attractions.split(',')
-    console.log(req.body)
+
+    // ! Add the user to the req.body, from the cookie
+    req.body.user = req.session.user
+
     // Create the document in the database
     const newDestination = await Destination.create(req.body)
     // Send back our destination with appropriate status code.
@@ -39,7 +39,10 @@ router.route('/destinations').post(async function (req, res, next) {
 
 router.route('/destinations').get(async function (req, res) { // call this function
   try {
-    const allDestinations = await Destination.find()
+    // * populate the user field
+    const allDestinations = await Destination.find().populate('user')
+    console.log(allDestinations)
+
     // ? Passes through allDestinations to the template I am rendering.
     res.render('destinations/index.ejs', {
       allDestinations: allDestinations
@@ -81,7 +84,16 @@ router.route('/destination-by-name/:name').get(async function (req, res, next) {
 router.route('/destinations/:id').delete(async function (req, res) {
   const destinationId = req.params.id
 
-  const destination = await Destination.findById(destinationId)
+  const destination = await Destination.findById(destinationId).populate('user')
+
+  // * Compare the user who is current logged in (req.session.user)
+  // * with the user ON the destination (destination.user)
+  console.log(req.session.user._id)
+  console.log(destination.user._id)
+  
+  if (!destination.user._id.equals(req.session.user._id)) {
+    return res.status(402).send({ message: "This is not your destination to delete!"})
+  }
 
   if (!destination) {
     return res.send({ message: "Destination doesn't exist." })

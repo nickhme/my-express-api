@@ -8,6 +8,7 @@ import logger from './middleware/logger.js'
 import errorHandler from './middleware/errorHandler.js'
 import methodOverride from 'method-override'
 import session from 'express-session'
+import mongoSanitize from 'express-mongo-sanitize'
 
 // import dotenv to extract environment variables from the .env file
 import dotenv from 'dotenv'
@@ -29,6 +30,9 @@ app.use(session({
 }))
 
 app.use(express.json())
+
+// * Strip out special chars like $, . from keys
+app.use(mongoSanitize());
 
 // * This will expect the form data from your form, and add to req.body 
 app.use(express.urlencoded({ extended: false }))

@@ -8,7 +8,11 @@ const destinationSchema = new mongoose.Schema({
   name: { type: String, required: true },
   country: { type: String, required: true },
   description: { type: String, required: false },
-  attractions: [{ type: String }]
+  attractions: [{ type: String }],
+  imageUrl: { type: String },
+  // * Adding a relationship between destinations and users
+  // ? This is called a reference relationship.
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 })
 
 // export the schema as a model
