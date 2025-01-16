@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>All Destinations</title>
+  <link rel="stylesheet"  href="/stylesheets/style.css" />
+  <script src="/scripts/app.js" defer></script>
 </head>
 <body>
   <h1>All Destinations</h1>
@@ -13,6 +15,7 @@
         <a href="/destinations/<%= destination._id %>">
           <%= destination.name %>
         </a>
+        <img src="<%=destination.image%>" alt="<%=destination.name%>" />
       </li>
     <% }) %>
   </ul>
