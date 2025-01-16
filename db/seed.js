@@ -4,6 +4,7 @@ import mongoose from "mongoose"
 import Destination from '../models/destination.js'
 import User from '../models/user.js'
 import destinations from '../data.js' 
+import destination from "../models/destination.js"
 // ? We definitely need a mongoose model (destinations, to create our data in the db)
 // ? We also need to use mongoose to connect to MongoDB
 // ? we need a data.js file to use to seed our data.
@@ -35,7 +36,23 @@ async function seed() {
   console.log('Seed the new destinations 🌱')
   const newDestinations = await Destination.create(destinations)
   console.log(newDestinations)
-  
+
+  console.log('Seeding the comments 🌱')
+
+  // Add a comment to my first destination
+  const comment = {
+    content: "It's not great.",
+    user: user
+  }
+
+  // push to the comment arrays
+  newDestinations[0].comments.push(comment)
+
+  // save it back to the DB.
+  await newDestinations[0].save()
+
+  console.log(newDestinations)
+
   // This ends the connection to database
   console.log('Goodbye! 🌱')
   await mongoose.disconnect()

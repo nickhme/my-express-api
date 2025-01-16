@@ -116,6 +116,11 @@ router.route('/destinations/update/:id').get(async function(req, res, next) {
 })
 
 router.route('/destinations/:id').put(async function (req, res) {
+  // are they logged in? if not, send them away
+  // get the destination they're trying to update
+  // check if they're authorized to do that
+  // if they are, let them make the update.
+  
   const destinationId = req.params.id
 
   const updatedDestination = await Destination.findByIdAndUpdate(destinationId, req.body, { new: true })

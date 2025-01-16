@@ -3,16 +3,26 @@
 
 import mongoose from "mongoose";
 
+// ? Creating an embedded schema
+const commentSchema = new mongoose.Schema({
+  content: { type: String, required: [true, "You can't post an empty comment."] },
+  // this is the user who posted the comment
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
+}, {
+  timestamps: true
+})
+
 // create a schema (consistent format) for my destination collection
 const destinationSchema = new mongoose.Schema({
   name: { type: String, required: true },
   country: { type: String, required: true },
   description: { type: String, required: false },
   attractions: [{ type: String }],
-  imageUrl: { type: String },
   // * Adding a relationship between destinations and users
   // ? This is called a reference relationship.
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  // ? This is an embedded schema, an array of comments
+  comments: [commentSchema]
 })
 
 // export the schema as a model
