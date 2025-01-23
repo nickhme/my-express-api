@@ -18,6 +18,7 @@ const destinationSchema = new mongoose.Schema({
   country: { type: String, required: true },
   description: { type: String, required: false },
   attractions: [{ type: String }],
+  image: { type: String, required: false },
   // * Adding a relationship between destinations and users
   // ? This is called a reference relationship.
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
